@@ -1,17 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>dueape</title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but dueape doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover">
+  <meta name="screen-orientation" content="portrait" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="x-rim-auto-match" content="none">
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta name="full-screen" content="yes">
+  <meta name="x5-fullscreen" content="true">
+  <script>
+    (function (designWidth, rem2px) {
+      var d = window.document.createElement('div');
+      d.style.width = '1rem';
+      d.style.display = "none";
+      var head = window.document.getElementsByTagName('head')[0];
+      head.appendChild(d);
+      var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+      var st = document.createElement('style');
+      var portrait = "@media screen and (min-width: " + window.innerWidth + "px) {html{font-size:" + ((window.innerWidth / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}";
+      var landscape = "@media screen and (min-width: " + window.innerHeight + "px) {html{font-size:" + ((window.innerHeight / (designWidth / rem2px) / defaultFontSize) * 100) + "%;}}"
+      st.innerHTML = portrait + landscape;
+      head.appendChild(st);
+      return defaultFontSize
+    })(750, 100)
+  </script>
+</head>
+<body>
+  <div id="app" />
+</body>
 </html>
