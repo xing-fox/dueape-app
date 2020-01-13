@@ -1,13 +1,6 @@
 <template>
   <div>
     <div :class="['header',{xheader: isIosX}]" ref="header">
-      <common-title
-        v-if="!adStatus"
-        :isIosX="isIosX"
-        :Opacity="opacity"
-        :isFixed="true"
-        :normal="false"
-        name="课程详情" />
       <div class="main">
         <div class="m-title">COPM2511期末提分班-3节课秒解必考题（共3期·6h）</div>
         <div class="m-times">12月13日-2020年1月15日 | 3次课</div>
@@ -134,7 +127,6 @@
 </template>
 
 <script>
-import CommonTitle from "@/components/common-title"
 import EwmModal from "@/components/ewm"
 export default {
   name: "courseDetails",
@@ -148,7 +140,6 @@ export default {
     }
   },
   components: {
-    CommonTitle,
     EwmModal
   },
   methods: {
@@ -161,25 +152,15 @@ export default {
       })
     }
   },
-  mounted() {
-    window.title = '课程详情'
-    // header滚动监听
-    const self = this
-    const HeaHeight = this.$refs.header.clientHeight
-    window.onscroll = function() {
-      if (window.scrollY > HeaHeight) self.opacity = `rgba(41, 44, 50, 1)`
-      if (window.scrollY < HeaHeight)
-        self.opacity = `rgba(41, 44, 50, ${window.scrollY / HeaHeight})`
-    };
-    // ios兼容
-    if (this.$formValue === 0) this.adStatus = true
-    if (
-      (this.$formValue === 1) &&
-      (this.$isIos &&
-        (window.screen.height === 812 && window.screen.width === 375)) ||
-      (window.screen.height === 896 && window.screen.width === 414())
-    )
-      this.isIosX = true
+  mounted () {
+    fetch('http://39.96.62.114:10086/course/detail', {
+      methods: 'POST',
+      data: {
+        courseId: '75'
+      }
+    }).then(res => {
+      console.log(res)
+    })
   }
 };
 </script>
@@ -187,15 +168,11 @@ export default {
 <style lang="less" scoped>
 .header {
   width: 100%;
-  padding: 1.28rem 0 0 0;
   background-image: url("../assets/img/bg_course.jpg");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: top left;
   position: relative;
-  &.xheader {
-    padding: 1.72rem 0 0 0;
-  }
   .main {
     padding: 0.4rem 0.33rem 0.9rem;
     .m-title {
