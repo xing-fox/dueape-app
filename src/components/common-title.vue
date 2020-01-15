@@ -84,5 +84,8 @@ export default {
       top: 0.88rem;
     }
   }
+  span {
+    font-weight: bold;
+  }
 }
 </style>

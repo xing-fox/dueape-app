@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-// import Vconsole from 'vconsole'
+import Vconsole from 'vconsole'
 import FastClick from 'fastclick'
 import JsBridge from './JsBridge'
 
-// new Vconsole()
+new Vconsole()
 const IsIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
 const getUrlParam = val => {
   const url = window.location.href.substring(1)

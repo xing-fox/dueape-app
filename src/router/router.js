@@ -38,5 +38,13 @@ export default [
     meta: {
       title: '订单详情'
     }
+  },
+  {
+    path: '/applyTutor',
+    name: 'applytutor',
+    component: resolve => require(['@/view/apply-tutor'], resolve),
+    meta: {
+      title: '申请Tutor'
+    }
   }
 ]
