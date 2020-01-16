@@ -127,6 +127,9 @@
 </template>
 
 <script>
+import {
+  courseDetail
+} from '@/fetch/api'
 import EwmModal from "@/components/ewm"
 export default {
   name: "courseDetails",
@@ -136,7 +139,8 @@ export default {
       adStatus: false,
       isIosX: false, // 判断ios机型
       footStatus: false,
-      opacity: "rgba(41, 44, 50, 0)"
+      opacity: 'rgba(41, 44, 50, 0)',
+      Data: Object
     }
   },
   components: {
@@ -153,13 +157,12 @@ export default {
     }
   },
   mounted () {
-    fetch('http://39.96.62.114:10086/course/detail', {
-      methods: 'POST',
-      data: {
-        courseId: '75'
-      }
+    courseDetail({
+      "courseId": 75
     }).then(res => {
-      console.log(res)
+      if (res.data === 0) {
+        this.Data = res.data
+      }
     })
   }
 };

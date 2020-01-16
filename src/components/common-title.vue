@@ -6,7 +6,7 @@
       fixed: isFixed,
       normal: normal
     }"
-    :style="{'background-color': Opacity}">
+    :style="{background: Opacity}">
     <i class="return" @click="returnBackFunc"></i>
     <span>{{ name }}</span>
   </div>
@@ -57,7 +57,7 @@ export default {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1;
+    z-index: 10;
   }
   &.normal {
     color: #2d2d2d;
@@ -67,13 +67,13 @@ export default {
   }
   i {
     display: inline-block;
-    width: 0.32rem;
-    height: 0.32rem;
+    width: 0.4rem;
+    height: 0.4rem;
     background-image: url("../assets/icon/back.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     position: absolute;
-    top: 0.4rem;
+    top: 0.36rem;
     left: 0.24rem;
     bottom: 0;
     margin: auto 0;

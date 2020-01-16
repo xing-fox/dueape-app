@@ -2,6 +2,7 @@
   .wrapper {
     font-size: 0;
     width: 100%;
+    min-height: 100vh;
     line-height: 1;
     position: relative;
     &:after {
@@ -17,14 +18,12 @@
       z-index: -1;
     }
     .content {
-      margin: .2rem 0 0 0;
+      padding-top: 1.48rem;
       .header {
         margin: 0 .3rem;
         padding: .4rem .3rem .48rem;
         background: #fff;
-        border: .01rem solid rgba(245, 234, 218, 1);
         border-radius: .1rem;
-        box-sizing: border-box;
         .image {
           display: flex;
           flex-direction: row;
@@ -33,9 +32,6 @@
           img {
             width: 1.12rem;
             height: 1.12rem;
-            background-image: url('../assets/icon/header_tutor.png');
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
           }
           div {
             color: #222;
@@ -73,6 +69,7 @@
             align-items: center;
             width: 100%;
             height: .76rem;
+            padding: .03rem;
             margin: .24rem 0 0 0;
             position: relative;
             &:before {
@@ -93,26 +90,44 @@
             input {
               border: none;
               -webkit-appearance: none;
+              color: #CDA34F;
               font-size: .3rem;
               width: 100%;
-              height: .76rem;
+              height: .7rem;
+              padding: 0 0 0 .1rem;
               box-sizing: border-box;
+              position: relative;
+              z-index: 2;
             }
           }
         }
       }
       .main {
-        height: 1rem;
         margin: .3rem .3rem;
-        padding: .6rem 0;
-        background: #fff;
-        border: .01rem solid rgba(245, 234, 218, 1);
+        padding: .6rem 0 .45rem;
         border-radius: .1rem;
-        box-sizing: border-box;
+        border: 1px;
+        background: #fff;
+        position: relative;
+        &:before {
+          content: '';
+          width: 200%;
+          height: 200%;
+          border-radius: .2rem;
+          border: 1px solid rgba(245, 234, 218, 1);
+          transform: scale(.5, .5);
+          transform-origin: 0 0;
+          position: absolute;
+          top: 0;
+          left: -.01rem;
+          right: 0;
+          bottom: 0;
+        }
         .select {
           display: flex;
           align-items: center;
           justify-content: center;
+          margin: 0 0 .6rem 0;
           li {
             display: flex;
             align-items: center;
@@ -123,18 +138,18 @@
               width: .3rem;
               height: .3rem;
               margin: 0 .1rem 0 0;
-              border: 1px solid rgba(191,191,191,1);
+              border: 1px solid rgba(191, 191, 191, 1);
               border-radius: .15rem;
               box-sizing: border-box;
               &.active {
-                border-color: #cab482;
+                border-color: #CDA34F;
                 position: relative;
                 &:before {
                   content: '';
                   width: .15rem;
                   height: .15rem;
                   border-radius: 50%;
-                  background: #cab482;
+                  background: #CDA34F;
                   position: absolute;
                   top: 0;
                   left: 0;
@@ -149,21 +164,158 @@
             }
           }
         }
+        .box {
+          margin: 0 .3rem;
+          &:last-child {
+            .input {
+              margin: .24rem 0 0 0;
+            }
+          }
+          .name {
+            color: #222;
+            font-size: .34rem;
+            margin: 0 0 .25rem 0;
+          }
+          .input {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: .76rem;
+            margin: .24rem 0 .5rem 0;
+            padding: .03rem;
+            border: 1px solid #fff;
+            box-sizing: content-box;
+            position: relative;
+            &:before {
+              content: '';
+              width: 200%;
+              height: 200%;
+              border-radius: .12rem;
+              border: 1px solid rgba(202, 202, 202, 1);
+              transform: scale(.5, .5);
+              transform-origin: 0 0;
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+            }
+            input {
+              border: none;
+              -webkit-appearance: none;
+              color: #CDA34F;
+              font-size: .3rem;
+              width: 100%;
+              height: .7rem;
+              padding: 0 0 0 .1rem;
+              box-sizing: border-box;
+              position: relative;
+              z-index: 2;
+            }
+          }
+          .textarea {
+            display: flex;
+            width: 100%;
+            height: 2rem;
+            padding: .03rem;
+            margin: .24rem 0 .5rem 0;
+            position: relative;
+            &:before {
+              content: '';
+              width: 200%;
+              height: 200%;
+              border-radius: .12rem;
+              border: 1px solid rgba(202, 202, 202, 1);
+              transform: scale(.5, .5);
+              transform-origin: 0 0;
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              z-index: 1;
+            }
+            textarea {
+              border: none;
+              -webkit-appearance: none;
+              color: #CDA34F;
+              font-size: .3rem;
+              width: 100%;
+              line-height: .4rem;
+              padding: .1rem;
+              box-sizing: border-box;
+              position: relative;
+              z-index: 2;
+            }
+            span {
+              color: #999;
+              font-size: .24rem;
+              position: absolute;
+              right: .1rem;
+              bottom: .1rem;
+              z-index: 3;
+            }
+          }
+          .image {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            margin: .24rem 0 .5rem 0;
+            img {
+              border: none;
+              width: 1.7rem;
+              height: 1.7rem;
+              margin: 0 .2rem 0 0;
+            }
+          }
+        }
+      }
+      .aggrement {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #222;
+        font-size: .28rem;
+        width: 100%;
+        margin: .4rem auto .5rem;
+        img {
+          width: .3rem;
+          height: .3rem;
+          margin: 0 .1rem 0 0;
+        }
+        span {
+          color: #CDA34F;
+          text-decoration: underline;
+          margin: 0 .1rem;
+        }
+      }
+      .submit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: .36rem;
+        width: 6.9rem;
+        height: 1rem;
+        margin: 0 auto .5rem;
+        border-radius: .05rem;
+        background: rgba(211, 211, 211, 1);
       }
     }
   }
 </style>
 
 <template>
-  <div class="wrapper">
+  <div class="wrapper" ref="header">
     <common-title
-      Opacity="1"
+      isFixed
+      :Opacity="opacity"
       name="申请Tutor"
     ></common-title>
     <div class="content">
       <div class="header">
         <div class="image">
-          <img src="">
+          <img src="../assets/icon/header_tutor.png">
           <div>更改头像</div>
         </div>
         <div class="name">
@@ -184,7 +336,63 @@
             <span>已工作</span>
           </li>
         </ul>
+        <div class="box">
+          <div class="name">在读院校</div>
+          <div class="input">
+            <input type="text" placeholder="请输入在读院校">
+          </div>
+        </div>
+        <div class="box">
+          <div class="name">所学专业</div>
+          <div class="input">
+            <input type="text" placeholder="请输入所学专业">
+          </div>
+        </div>
+        <div class="box">
+          <div class="name">在读年级</div>
+          <div class="input">
+            <input type="text" placeholder="请输入在读年级，例如：研一">
+          </div>
+        </div>
       </div>
+      <div class="main">
+        <div class="box">
+          <div class="name">意向教学科目课号</div>
+          <div class="input">
+            <input type="text" placeholder="请输入课程科目课号，例如：COMP1511">
+          </div>
+        </div>
+        <div class="box">
+          <div class="name">教学所选课程的原因</div>
+          <div class="textarea">
+            <textarea type="text" placeholder="请输入所选课程的原因，例如学分高，有教学经验" />
+            <span>10-100字</span>
+          </div>
+        </div>
+        <div class="box">
+          <div class="name">擅长教学技能</div>
+          <div class="input">
+            <input type="text" placeholder="请输入擅长教学技能，例如：Python编程">
+          </div>
+        </div>
+        <div class="box">
+          <div class="name">学分/奖项或教学经历证明</div>
+          <div class="image">
+            <img src="../assets/icon/upload.jpg">
+          </div>
+        </div>
+        <div class="box">
+          <div class="name">请填写个人微信号</div>
+          <div class="input">
+            <input type="text" placeholder="请输入个人微信号">
+          </div>
+        </div>
+      </div>
+      <div class="aggrement">
+        <img src="../assets/icon/agree.png">
+        同意成为<span>老师的协议,</span>以上信息均为必填选项
+      </div>
+      <div class="submit">提交</div>
     </div>
   </div>
 </template>
@@ -194,11 +402,19 @@ import CommonTitle from "@/components/common-title"
 export default {
   name: 'applyTotur',
   data () {
-    return {}
+    return {
+      opacity: 'linear-gradient(270deg, rgba(226, 176, 102, 0), rgba(239, 204, 148, 0))'
+    }
   },
   components: {
     CommonTitle
   },
-  mounted () {}
+  mounted () {
+    const self = this
+    window.onscroll = function() {
+      if (window.scrollY > 100) self.opacity = `linear-gradient(270deg, rgba(226, 176, 102, 1), rgba(239, 204, 148, 1))`
+      if (window.scrollY < 100) self.opacity = `linear-gradient(270deg, rgba(226, 176, 102, ${window.scrollY / 100}), rgba(239, 204, 148, ${window.scrollY / 100}))`
+    }
+  }
 }
 </script>
