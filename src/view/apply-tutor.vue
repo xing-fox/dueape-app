@@ -12,7 +12,7 @@
       background-image: url('../assets/img/tutor.png');
       background-size: 100% 100%;
       background-repeat: no-repeat;
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       z-index: -1;
@@ -309,8 +309,8 @@
   <div class="wrapper" ref="header">
     <common-title
       isFixed
-      :Opacity="opacity"
       name="申请Tutor"
+      :Opacity="opacity"
     ></common-title>
     <div class="content">
       <div class="header">

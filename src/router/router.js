@@ -46,5 +46,13 @@ export default [
     meta: {
       title: '申请Tutor'
     }
+  },
+  {
+    path: '/applyAgain',
+    name: 'applyagain',
+    component: resolve => require(['@/view/apply-again'], resolve),
+    meta: {
+      title: ''
+    }
   }
 ]
