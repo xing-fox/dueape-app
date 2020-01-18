@@ -35,17 +35,21 @@
 </template>
 
 <script>
+import {
+  getMyOrderList
+} from '@/fetch/api'
 export default {
   name: 'order',
   methods: {
     routeFunc () {
-      this.$JsBridge.GetIosMethods(bridge => {
-        bridge.callHandler('RouteView', {
-          type: '',
-          url: 'http://xiaoxixue.com/dueape/#/orderDetails'
-        }, response => {})
-      })
     }
+  },
+  mounted () {
+    getMyOrderList({
+      customerId: 39
+    }).then(res => {
+      window.console.log(res)
+    })
   }
 }
 </script>

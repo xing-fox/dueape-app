@@ -7,7 +7,7 @@
       normal: normal
     }"
     :style="{background: Opacity}">
-    <i class="return" @click="returnBackFunc"></i>
+    <i @click="returnBackFunc"></i>
     <span>{{ name }}</span>
   </div>
 </template>
@@ -36,7 +36,11 @@ export default {
   methods: {
     returnBackFunc () {
       this.$JsBridge.GetIosMethods(bridge => {
-        bridge.callHandler('ReturnBack', {}, response => {})
+        bridge.callHandler('dueWebCallNative',{
+          actionType: 0,
+          actionTarget: 'ReturnBack',
+          data: {}
+        })
       })
     }
   }
@@ -49,7 +53,7 @@ export default {
   font-size: 0.34rem;
   height: 0.88rem;
   line-height: 0.88rem;
-  padding: 0.4rem 0 0 0;
+  padding: 0.68rem 0 0 0;
   text-align: center;
   position: relative;
   &.fixed {
@@ -67,16 +71,15 @@ export default {
   }
   i {
     display: inline-block;
-    width: 0.4rem;
-    height: 0.4rem;
+    width: 0.88rem;
+    height: 0.88rem;
     background-image: url("../assets/icon/back.png");
-    background-size: 100% 100%;
+    background-size: 45% 45%;
+    background-position: center left;
     background-repeat: no-repeat;
     position: absolute;
-    top: 0.36rem;
-    left: 0.24rem;
+    left: .24rem;
     bottom: 0;
-    margin: auto 0;
   }
   &.xtrue {
     padding: 0.88rem 0 0 0 !important;

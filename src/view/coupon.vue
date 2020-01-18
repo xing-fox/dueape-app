@@ -1,60 +1,58 @@
 <template>
   <div class="coupon">
     <div class="can-use">可使用</div>
-    <div class="item">
-      <div class="item-content">
-        <div class="left">
-          <div class="left-title">COPM新学期大礼包</div>
-          <div class="left-intro">仅限购买课程时使用</div>
+    <div class="item" v-for="(item, index) in Data" :key="index">
+      <template v-if="item.couponStatus == 1">
+        <div class="item-content">
+          <div class="left">
+            <div class="left-title">{{ item.couponName }}</div>
+            <div class="left-intro">仅限购买课程时使用</div>
+          </div>
+          <div class="right">
+            Au$ <span>{{ item.price || 0 }}</span>
+          </div>
         </div>
-        <div class="right">
-          Au$ <span>100</span>
-        </div>
-      </div>
-      <div class="item-time">有效期至2011-12-2</div>
-    </div>
-    <div class="item">
-      <div class="item-content">
-        <div class="left">
-          <div class="left-title">COPM新学期大礼包</div>
-          <div class="left-intro">仅限购买课程时使用</div>
-        </div>
-        <div class="right">
-          Au$ <span>100</span>
-        </div>
-      </div>
-      <div class="item-time">有效期至2011-12-2</div>
+        <div class="item-time">有效期至{{ item.endTime }}</div>
+      </template>
     </div>
     <div class="uncan-use">已失效</div>
-    <div class="item un-use">
-      <div class="item-content">
-        <div class="left">
-          <div class="left-title">COPM新学期大礼包</div>
-          <div class="left-intro">仅限购买课程时使用</div>
+    <div class="item un-use" v-for="(item, index) in Data" :key="index">
+      <template>
+        <div class="item-content">
+          <div class="left">
+            <div class="left-title">{{ item.couponName }}</div>
+            <div class="left-intro">仅限购买课程时使用</div>
+          </div>
+          <div class="right">
+            Au$ <span>{{ item.price || 0 }}</span>
+          </div>
         </div>
-        <div class="right">
-          Au$ <span>100</span>
-        </div>
-      </div>
-      <div class="item-time">有效期至2011-12-2</div>
-    </div>
-    <div class="item un-use">
-      <div class="item-content">
-        <div class="left">
-          <div class="left-title">COPM新学期大礼包</div>
-          <div class="left-intro">仅限购买课程时使用</div>
-        </div>
-        <div class="right">
-          Au$ <span>100</span>
-        </div>
-      </div>
-      <div class="item-time">有效期至2011-12-2</div>
+        <div class="item-time">有效期至{{ item.endTime }}</div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+import {
+  getMyCouponList
+} from '@/fetch/api'
+export default {
+  name: 'coupon',
+  data () {
+    return {
+      Data: []
+    }
+  },
+  mounted () {
+    getMyCouponList({}).then(res => {
+      if (Number(res.code) === 0) {
+        this.Data = res.data.rowList
+        window.console.log(this.Data)
+      }
+    })
+  }
+}
 </script>
 
 <style lang="less" scoped>

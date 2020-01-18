@@ -18,7 +18,7 @@
       z-index: -1;
     }
     .content {
-      padding-top: 1.48rem;
+      padding: 1.58rem 0 .5rem;
       .header {
         margin: 0 .3rem;
         padding: .4rem .3rem .48rem;
@@ -392,7 +392,7 @@
         <img src="../assets/icon/agree.png">
         同意成为<span>老师的协议,</span>以上信息均为必填选项
       </div>
-      <div class="submit">提交</div>
+      <div class="submit" @click="submitFunc">提交</div>
     </div>
   </div>
 </template>
@@ -408,6 +408,13 @@ export default {
   },
   components: {
     CommonTitle
+  },
+  methods: {
+    submitFunc () {
+      this.$router.push({
+        path: '/applyAgain'
+      })
+    }
   },
   mounted () {
     const self = this

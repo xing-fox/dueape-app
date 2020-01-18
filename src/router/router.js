@@ -52,7 +52,7 @@ export default [
     name: 'applyagain',
     component: resolve => require(['@/view/apply-again'], resolve),
     meta: {
-      title: ''
+      title: '审核中...'
     }
   }
 ]

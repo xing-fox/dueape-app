@@ -44,7 +44,11 @@
     width: 100%;
     padding: 2rem 0 0 0;
     box-sizing: border-box;
-    background: #fff;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, .65),
+      rgba(255, 255, 255, 1)
+    );
     .content-title {
       color: #222;
       font-size: 0.34rem;
@@ -108,29 +112,36 @@ export default {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       // 曲线绘制
       this.xOffset += speed
-      this.drawWave(ctx, this.xOffset)
-      this.drawWave(ctx, this.xOffset*1.4)
-      this.drawWave(ctx, this.xOffset*1.8)
+      this.drawWave(ctx)
       requestAnimationFrame(this.draw.bind(this, speed))
     },
-    drawWave (ctx, xOffset = 0, waveWidth = 0.015, waveHeight = 20) {
-      const points = [];
+    drawWave (ctx) {
+      // const waveWidth = 0.03 // 波浪宽度,数越小越宽
+      // const waveHeight = 10 // 波浪高度,数越大越高
+      const points = []
       const canvasWidth = this.canvasWidth
       const canvasHeight = this.canvasHeight
       const startX = 0
-      // const waveWidth = 0.03 // 波浪宽度,数越小越宽
-      // const waveHeight = 10 // 波浪高度,数越大越高
-      ctx.beginPath()
-      for (let x = startX; x < startX + canvasWidth; x += 20 / canvasWidth) {
-        const y = waveHeight * Math.sin((startX + x) * waveWidth + xOffset)
-        points.push([x, (canvasHeight / 2) + y])
-        ctx.lineTo(x, (canvasHeight / 2) + y)
-      }
-      ctx.lineTo(canvasWidth, canvasHeight)
-      ctx.lineTo(startX, canvasHeight)
-      ctx.lineTo(points[0][0], points[0][1])
-      ctx.fillStyle = 'rgba(255, 255, 255, .7)'
-      ctx.fill()
+      const Arr = [{
+        offset: this.xOffset,
+      }, {
+        offset: this.xOffset*1.5 + 20,
+      }, {
+        offset: this.xOffset*2 - 20,
+      }]
+      Arr.map(item => {
+        ctx.beginPath()
+        for (let x = startX; x < startX + canvasWidth; x += 20 / canvasWidth) {
+          const y = 20 * Math.sin((startX + x) *  0.015 + item.offset)
+          points.push([x, (canvasHeight / 2) + y])
+          ctx.lineTo(x, (canvasHeight / 2) + y)
+        }
+        ctx.lineTo(canvasWidth, canvasHeight)
+        ctx.lineTo(startX, canvasHeight)
+        ctx.lineTo(points[0][0], points[0][1])
+        ctx.fillStyle = 'rgba(255, 255, 255, .3)'
+        ctx.fill()
+      })
     }
   },
   mounted () {
@@ -141,7 +152,7 @@ export default {
     this.canvas = canvas
     this.canvasWidth = canvas.width
     this.canvasHeight = canvas.height
-    this.draw(.01)
+    this.draw(.002)
   }
 }
 </script>
