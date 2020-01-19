@@ -54,8 +54,7 @@ export function Post (url, params) {
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
       }
-    })
-      .then(response => {
+    }).then(response => {
         resolve(response.data)
       }, err => {
         reject(err)

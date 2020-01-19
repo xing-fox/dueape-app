@@ -48,7 +48,6 @@ export default {
     getMyCouponList({}).then(res => {
       if (Number(res.code) === 0) {
         this.Data = res.data.rowList
-        window.console.log(this.Data)
       }
     })
   }

@@ -22,3 +22,17 @@ export const getMyCouponList = (param) => {
 export const getMyOrderList = (param) => {
   return Post('/course/getMyOrderList', param)
 }
+
+/**
+ * @param 意见反馈（需登录）
+ */
+export const optionCreate = (param) => {
+  return Post('/feedBack/create', param)
+}
+
+/**
+ * @param 获取文件上传签名
+ */
+export const getTempkey = (param) => {
+  return Post('/upload/getTempkey', param)
+}

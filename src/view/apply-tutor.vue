@@ -63,7 +63,6 @@
         .name {
           color: #222;
           font-size: .34rem;
-          margin: .4rem 0 0 0;
           div.input {
             display: flex;
             align-items: center;
@@ -273,20 +272,14 @@
       .aggrement {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         color: #222;
         font-size: .28rem;
-        width: 100%;
-        margin: .4rem auto .5rem;
+        margin: .4rem 0 .5rem .3rem;
         img {
-          width: .3rem;
-          height: .3rem;
+          width: .2rem;
+          height: .2rem;
           margin: 0 .1rem 0 0;
-        }
-        span {
-          color: #CDA34F;
-          text-decoration: underline;
-          margin: 0 .1rem;
         }
       }
       .submit {
@@ -314,10 +307,10 @@
     ></common-title>
     <div class="content">
       <div class="header">
-        <div class="image">
+        <!-- <div class="image">
           <img src="../assets/icon/header_tutor.png">
           <div>更改头像</div>
-        </div>
+        </div> -->
         <div class="name">
           <div>姓名</div>
           <div class="input">
@@ -389,8 +382,8 @@
         </div>
       </div>
       <div class="aggrement">
-        <img src="../assets/icon/agree.png">
-        同意成为<span>老师的协议,</span>以上信息均为必填选项
+        <img src="../assets/icon/import.png">
+        以上均为必填选项，请确保信息真实有效
       </div>
       <div class="submit" @click="submitFunc">提交</div>
     </div>

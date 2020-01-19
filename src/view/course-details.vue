@@ -136,6 +136,13 @@ export default {
       if (window.scrollY > 100) self.opacity = `rgba(41, 44, 50, 1)`
       if (window.scrollY < 100) self.opacity = `rgba(41, 44, 50, ${window.scrollY / 100})`
     }
+    // ios兼容
+    // if (
+    //   (this.$isIos &&
+    //     (window.screen.height === 812 && window.screen.width === 375)) ||
+    //   (window.screen.height === 896 && window.screen.width === 414())
+    // )
+    //   this.isIosX = true
     courseDetail({
       courseId: 75
     }).then(res => {

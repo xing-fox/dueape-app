@@ -152,7 +152,7 @@ export default {
     this.canvas = canvas
     this.canvasWidth = canvas.width
     this.canvasHeight = canvas.height
-    this.draw(.002)
+    this.draw(.005)
   }
 }
 </script>
