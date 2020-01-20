@@ -46,7 +46,7 @@ export default {
   },
   mounted () {
     getMyOrderList({
-      customerId: 39
+      customerId: this.$CustomerId
     }).then(res => {
       window.console.log(res)
     })

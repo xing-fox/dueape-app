@@ -41,6 +41,7 @@ import {
   optionCreate
 } from '@/fetch/api'
 import COS from 'cos-js-sdk-v5'
+import { setTimeout } from 'timers';
 export default {
   name: 'Opinion',
   data () {
@@ -49,7 +50,7 @@ export default {
       typeIndex: 0,
       imgData: [],
       formData: {
-        customerId: '',
+        customerId: this.$CustomerId,
         type: 1,
         content: '',
         wechat: ''
@@ -100,7 +101,21 @@ export default {
       optionCreate(Object.assign(this.formData, {
         imageUrl: this.imgData.join(',')
       })).then(res => {
-        window.console.log(res)
+        if (Number(res.code) === 0) {
+          this.$toast(res.data, {
+            durtaion: 500,
+            location: 'center'
+          })
+          setTimeout(() => {
+            this.$JsBridge.GetIosMethods(bridge => {
+              bridge.callHandler('dueWebCallNative',{
+                actionType: 0,
+                actionTarget: 'ReturnBack',
+                data: {}
+              })
+            })
+          }, 500)
+        }
       })
     }
   }

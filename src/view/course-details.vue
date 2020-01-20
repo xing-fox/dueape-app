@@ -49,17 +49,17 @@
       <div class="title t-height">老师介绍</div>
       <div class="teacher">
         <div class="t-image">
-          <img src="../assets/img/photo.jpg">
+          <img :src="'http://' + Data.tutorPhotoUrl">
         </div>
         <div class="t-details">
-          <div class="details-name">Tracy</div>
-          <div class="details-item">
+          <div class="details-name">{{ Data.tutorName }}</div>
+          <!-- <div class="details-item">
             <span>·</span>
             <span class="item-intro">特拉华州州立大学工商管理硕士。</span>
-          </div>
+          </div> -->
           <div class="details-item">
             <span>·</span>
-            <span class="item-intro">曾在中英国际学院担任商务学、金融学、会计学专业教师，擅长在展示方程的实际方面和用法，比较重视学生解题背后的过程和概念。</span>
+            <span class="item-intro">{{ Data.tutorIntroduce }}</span>
           </div>
         </div>
       </div>
@@ -69,26 +69,12 @@
         <div class="notice-main">
           <div class="notice-main-title">课节说明</div>
           <div class="notice-main-intro">
-            <span>直播课：</span>
-            <span>课程按照开课时间准时开课，请大家准时进 教室上课在视频上线后可在我的课程内查看。</span>
+            <span style="color: #222; font-weight: bold;">直播课节：</span>
+            <span>课程按照开课时间准时开课，请大家准时进入教室上课</span>
           </div>
           <div class="notice-main-intro">
-            <span>视频课：</span>
-            <span>课程按照开课时间准时开课，请大家准时进 教室上课。 视频课：在视频上线后可在我的课程内查看。</span>
-          </div>
-        </div>
-      </div>
-      <div class="notice">
-        <div class="notice-list">2</div>
-        <div class="notice-main">
-          <div class="notice-main-title">课节说明</div>
-          <div class="notice-main-intro">
-            <span>直播课：</span>
-            <span>课程按照开课时间准时开课，请大家准时进 教室上课在视频上线后可在我的课程内查看。</span>
-          </div>
-          <div class="notice-main-intro">
-            <span>视频课：</span>
-            <span>课程按照开课时间准时开课，请大家准时进 教室上课在视频上线后可在我的课程内查看。</span>
+            <span style="color: #222; font-weight: bold;">视频课节：</span>
+            <span>在视频上线后可在我的课程内查看</span>
           </div>
         </div>
       </div>
@@ -148,7 +134,6 @@ export default {
     courseDetail({
       courseId: 75
     }).then(res => {
-      window.console.log(res)
       if (Number(res.code) === 0) {
         this.Data = res.data
       }

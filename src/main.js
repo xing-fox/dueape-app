@@ -3,6 +3,12 @@ import App from './App.vue'
 import router from './router'
 import Vconsole from 'vconsole'
 import JsBridge from './JsBridge'
+import {Alert, Confirm, Toast, Loading} from 'wc-messagebox'
+import 'wc-messagebox/style.css'
+Vue.use(Alert)
+Vue.use(Confirm)
+Vue.use(Toast)
+Vue.use(Loading)
 
 new Vconsole()
 const IsIos = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
@@ -24,6 +30,13 @@ Vue.prototype.$formValue = getUrlParam('form') === 'app' // 0 --> 微信h5  || 1
 //获取token
 window.localStorage.setItem('token', '')
 // JsBridge.GetIosMethods(bridge => {
+//   bridge.callHandler('dueWebCallNative',{
+//     actionType: 0,
+//     actionTarget: 'GetCustomerId',
+//     data: {}
+//   }, res => {
+//     Vue.prototype.$CustomerId = res
+//   })
 //   bridge.callHandler('dueWebCallNative',{
 //     actionType: 0,
 //     actionTarget: 'GetToken',

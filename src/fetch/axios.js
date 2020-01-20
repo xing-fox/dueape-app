@@ -8,6 +8,7 @@ axios.defaults.withCredentials = true
 
 axios.interceptors.request.use(config => {
   const token = window.localStorage.getItem('token')
+  window.console.log(token)
   if (token) config.headers.Authorization = token
   return config
 }, error => {

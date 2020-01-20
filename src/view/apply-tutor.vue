@@ -292,6 +292,7 @@
         justify-content: center;
         color: #fff;
         font-size: .36rem;
+        pointer-events: none;
         width: 6.9rem;
         height: 1rem;
         margin: 0 auto .5rem;
@@ -299,6 +300,7 @@
         background: rgba(211, 211, 211, 1);
         &.bgColor {
           color: #64391a;
+          pointer-events: initial;
           background: linear-gradient(
             90deg,
             rgba(247, 208, 150, 1),
@@ -419,7 +421,7 @@
         <img src="../assets/icon/import.png">
         以上均为必填选项，请确保信息真实有效
       </div>
-      <div class="submit bgColor" @click="submitFunc">提交</div>
+      <div :class="['submit', {bgColor: formData.name}]" @click="submitFunc">提交</div>
     </div>
   </div>
 </template>
@@ -429,6 +431,7 @@ import {
   applyTutor
 } from '@/fetch/api'
 import CommonTitle from "@/components/common-title"
+import { setTimeout } from 'timers';
 export default {
   name: 'applyTotur',
   data () {
@@ -440,8 +443,7 @@ export default {
         text: '已工作'
       }],
       formData: {
-        customerId: '',
-        photoUrl: '',
+        customerId: this.$CustomerId,
         name: '',
         workStatus: '',
         school: '',
@@ -458,13 +460,12 @@ export default {
       opacity: 'linear-gradient(270deg, rgba(226, 176, 102, 0), rgba(239, 204, 148, 0))'
     }
   },
-  computed: {
-    submitColor () {
-      this.formData.map(item => {
-
-      })
-    }
-  },
+  // computed: {
+  //   submitColor () {
+  //     this.formData.map(item => {
+  //     })
+  //   }
+  // },
   components: {
     CommonTitle
   },
@@ -474,8 +475,16 @@ export default {
       this.type = eq
     },
     submitFunc () {
-      this.$router.push({
-        path: '/applyAgain'
+      applyTutor(this.formData).then(res => {
+        this.$toast(res.data, {
+          durtaion: 500,
+          location: 'center'
+        })
+        setTimeout(() => {
+          this.$router.push({
+            path: '/applyAgain'
+          })
+        }, 500)
       })
     }
   },
