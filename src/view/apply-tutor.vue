@@ -18,7 +18,10 @@
       z-index: -1;
     }
     .content {
-      padding: 1.58rem 0 .5rem;
+      padding: 1.68rem 0 .5rem;
+      &.xcontent {
+        padding: 2.08rem 0 .5rem;
+      }
       .header {
         margin: 0 .3rem;
         padding: .4rem .3rem .48rem;
@@ -121,6 +124,7 @@
           left: -.01rem;
           right: 0;
           bottom: 0;
+          z-index: -1;
         }
         .select {
           display: flex;
@@ -293,6 +297,14 @@
         margin: 0 auto .5rem;
         border-radius: .05rem;
         background: rgba(211, 211, 211, 1);
+        &.bgColor {
+          color: #64391a;
+          background: linear-gradient(
+            90deg,
+            rgba(247, 208, 150, 1),
+            rgba(241, 185, 108, 1)
+          );
+        }
       }
     }
   }
@@ -303,9 +315,10 @@
     <common-title
       isFixed
       name="申请Tutor"
+      :isIosX="isIosX"
       :Opacity="opacity"
     ></common-title>
-    <div class="content">
+    <div :class="['content', {xcontent: isIosX}]">
       <div class="header">
         <!-- <div class="image">
           <img src="../assets/icon/header_tutor.png">
@@ -314,58 +327,79 @@
         <div class="name">
           <div>姓名</div>
           <div class="input">
-            <input type="text" placeholder="请填写姓名">
+            <input type="text" v-model="formData.name" placeholder="请填写姓名">
           </div>
         </div>
       </div>
       <div class="main">
         <ul class="select">
-          <li>
-            <div class="active"></div>
-            <span>在读</span>
-          </li>
-          <li>
-            <div></div>
-            <span>已工作</span>
+          <li
+            v-for="(item, index) in choiseData"
+            :key="index"
+            @click="choiseFunc(index)">
+            <div :class="{active: type === index}"></div>
+            <span>{{ item.text }}</span>
           </li>
         </ul>
-        <div class="box">
-          <div class="name">在读院校</div>
-          <div class="input">
-            <input type="text" placeholder="请输入在读院校">
+        <template v-if="type === 0">
+          <div class="box">
+            <div class="name">在读院校</div>
+            <div class="input">
+              <input type="text" v-model="formData.school" placeholder="请输入在读院校">
+            </div>
           </div>
-        </div>
-        <div class="box">
-          <div class="name">所学专业</div>
-          <div class="input">
-            <input type="text" placeholder="请输入所学专业">
+          <div class="box">
+            <div class="name">所学专业</div>
+            <div class="input">
+              <input type="text" v-model="formData.major" placeholder="请输入所学专业">
+            </div>
           </div>
-        </div>
-        <div class="box">
-          <div class="name">在读年级</div>
-          <div class="input">
-            <input type="text" placeholder="请输入在读年级，例如：研一">
+          <div class="box">
+            <div class="name">在读年级</div>
+            <div class="input">
+              <input type="text" v-model="formData.grade" placeholder="请输入在读年级，例如：研一">
+            </div>
           </div>
-        </div>
+        </template>
+        <template v-else>
+          <div class="box">
+            <div class="name">毕业院校</div>
+            <div class="input">
+              <input type="text" v-model="formData.school" placeholder="请输入在读院校">
+            </div>
+          </div>
+          <div class="box">
+            <div class="name">所学专业</div>
+            <div class="input">
+              <input type="text" v-model="formData.major" placeholder="请输入所学专业">
+            </div>
+          </div>
+          <div class="box">
+            <div class="name">您的学历</div>
+            <div class="input">
+              <input type="text" v-model="formData.degree" placeholder="请输入您的学历">
+            </div>
+          </div>
+        </template>
       </div>
       <div class="main">
         <div class="box">
           <div class="name">意向教学科目课号</div>
           <div class="input">
-            <input type="text" placeholder="请输入课程科目课号，例如：COMP1511">
+            <input type="text" v-model="formData.intentionCourseTitle" placeholder="请输入课程科目课号，例如：COMP1511">
           </div>
         </div>
         <div class="box">
           <div class="name">教学所选课程的原因</div>
           <div class="textarea">
-            <textarea type="text" placeholder="请输入所选课程的原因，例如学分高，有教学经验" />
+            <textarea type="text" v-model="formData.applyReason" placeholder="请输入所选课程的原因，例如学分高，有教学经验" />
             <span>10-100字</span>
           </div>
         </div>
         <div class="box">
           <div class="name">擅长教学技能</div>
           <div class="input">
-            <input type="text" placeholder="请输入擅长教学技能，例如：Python编程">
+            <input type="text" v-model="formData.research" placeholder="请输入擅长教学技能，例如：Python编程">
           </div>
         </div>
         <div class="box">
@@ -377,7 +411,7 @@
         <div class="box">
           <div class="name">请填写个人微信号</div>
           <div class="input">
-            <input type="text" placeholder="请输入个人微信号">
+            <input type="text" v-model="formData.wxId" placeholder="请输入个人微信号">
           </div>
         </div>
       </div>
@@ -385,24 +419,60 @@
         <img src="../assets/icon/import.png">
         以上均为必填选项，请确保信息真实有效
       </div>
-      <div class="submit" @click="submitFunc">提交</div>
+      <div class="submit bgColor" @click="submitFunc">提交</div>
     </div>
   </div>
 </template>
 
 <script>
+import {
+  applyTutor
+} from '@/fetch/api'
 import CommonTitle from "@/components/common-title"
 export default {
   name: 'applyTotur',
   data () {
     return {
+      type: 0,
+      choiseData: [{
+        text: '在读'
+      }, {
+        text: '已工作'
+      }],
+      formData: {
+        customerId: '',
+        photoUrl: '',
+        name: '',
+        workStatus: '',
+        school: '',
+        major: '',
+        degree: '',
+        grade: '',
+        intentionCourseTitle: '',
+        applyReason: '',
+        research: '',
+        filePath: '',
+        wxId: ''
+      },
+      isIosX: false,
       opacity: 'linear-gradient(270deg, rgba(226, 176, 102, 0), rgba(239, 204, 148, 0))'
+    }
+  },
+  computed: {
+    submitColor () {
+      this.formData.map(item => {
+
+      })
     }
   },
   components: {
     CommonTitle
   },
   methods: {
+    choiseFunc (eq) {
+      window.console.log(eq)
+      this.type = eq
+    },
     submitFunc () {
       this.$router.push({
         path: '/applyAgain'
@@ -411,9 +481,15 @@ export default {
   },
   mounted () {
     const self = this
-    window.onscroll = function() {
+    window.onscroll = function () {
       if (window.scrollY > 100) self.opacity = `linear-gradient(270deg, rgba(226, 176, 102, 1), rgba(239, 204, 148, 1))`
       if (window.scrollY < 100) self.opacity = `linear-gradient(270deg, rgba(226, 176, 102, ${window.scrollY / 100}), rgba(239, 204, 148, ${window.scrollY / 100}))`
+    }
+    // 判断ios机型
+    if ((this.$isIos && (window.screen.height === 812 && window.screen.width === 375)) ||
+      (window.screen.height === 896 && window.screen.width === 414)
+    ) {
+      this.isIosX = true
     }
   }
 }

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import Vconsole from 'vconsole'
-import FastClick from 'fastclick'
 import JsBridge from './JsBridge'
 
 new Vconsole()
@@ -21,12 +20,6 @@ Vue.config.productionTip = false
 Vue.prototype.$JsBridge = JsBridge
 Vue.prototype.$isIos = IsIos // 系统判断
 Vue.prototype.$formValue = getUrlParam('form') === 'app' // 0 --> 微信h5  || 1 --> app
-
-if ('addEventListener' in document) {
-  document.addEventListener('DOMContentLoaded', function() {
-      FastClick.attach(document.body)
-  }, false)
-}
 
 //获取token
 window.localStorage.setItem('token', '')

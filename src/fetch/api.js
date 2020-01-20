@@ -33,6 +33,13 @@ export const optionCreate = (param) => {
 /**
  * @param 获取文件上传签名
  */
-export const getTempkey = (param) => {
-  return Post('/upload/getTempkey', param)
+export const getToken = (param) => {
+  return Post('/upload/getToken', param)
+}
+
+/**
+ * @param 用户申请导师，提交资料（需登录）
+ */
+export const applyTutor = (param) => {
+  return Post('/customer/applyTutor', param)
 }

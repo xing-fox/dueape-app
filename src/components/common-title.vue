@@ -53,7 +53,7 @@ export default {
   font-size: 0.34rem;
   height: 0.88rem;
   line-height: 0.88rem;
-  padding: 0.68rem 0 0 0;
+  padding: 0.48rem 0 0 0;
   text-align: center;
   position: relative;
   &.fixed {

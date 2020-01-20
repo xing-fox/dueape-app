@@ -75,7 +75,9 @@
 
 <template>
   <div class="wrapper">
-    <common-title isFixed name=""></common-title>
+    <common-title
+    isFixed
+    name=""></common-title>
     <div class="icon">
       <div class="image">
         <img src="../assets/img/apply.png">

@@ -21,4 +21,6 @@ yarn lint
 ```
 
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```
+##### ip: 39.96.62.114
+##### 密码: KeVn6wMFFZ0xcirjFg3A

@@ -1,13 +1,15 @@
 <template>
-  <div class="wrapper">
+  <div :class="['wrapper', {xwrapper: isIosX}]">
     <common-title
       isFixed
-      isIosX
       name="课程详情"
+      :isIosX="isIosX"
       :normal="false"
       :Opacity="opacity"
     ></common-title>
-    <div :class="['header',{xheader: isIosX}]" ref="header">
+    <div
+      :class="['header',{xheader: isIosX}]"
+      ref="header">
       <div class="main">
         <div class="m-title">{{ Data.courseTitle }}-{{ Data.courseNo }}</div>
         <div class="m-times">{{ Data.courseShowInfo }}</div>
@@ -118,8 +120,9 @@ export default {
     return {
       status: false, // 二维码状态
       adStatus: false,
-      isIosX: this.$isIos, // 判断ios机型
+      isIosX: false,
       footStatus: false,
+      formValue: this.$formValue,
       opacity: 'rgba(41, 44, 50, 0)',
       Data: Object
     }
@@ -136,13 +139,12 @@ export default {
       if (window.scrollY > 100) self.opacity = `rgba(41, 44, 50, 1)`
       if (window.scrollY < 100) self.opacity = `rgba(41, 44, 50, ${window.scrollY / 100})`
     }
-    // ios兼容
-    // if (
-    //   (this.$isIos &&
-    //     (window.screen.height === 812 && window.screen.width === 375)) ||
-    //   (window.screen.height === 896 && window.screen.width === 414())
-    // )
-    //   this.isIosX = true
+    // 判断ios机型
+    if ((this.$isIos && (window.screen.height === 812 && window.screen.width === 375)) ||
+      (window.screen.height === 896 && window.screen.width === 414)
+    ) this.isIosX = true
+
+    // 获取data
     courseDetail({
       courseId: 75
     }).then(res => {
@@ -161,8 +163,11 @@ export default {
   width: 100%;
   min-height: 100vh;
   line-height: 1;
-  padding: 2rem 0 .5rem 0;
+  padding: 1.68rem 0 .5rem 0;
   position: relative;
+  &.xwrapper {
+    padding: 2.08rem 0 .5rem 0;
+  }
   &:after {
     content: '';
     width: 100%;

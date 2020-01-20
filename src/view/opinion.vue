@@ -21,7 +21,7 @@
       <textarea placeholder="请输入反馈内如..."></textarea>
     </div>
     <div class="uploadImg">
-      <img v-for="(item, index) in imgData" :key="index" src="item">
+      <img v-for="(item, index) in imgData" :key="index" :src="item">
       <div class="uploadInput">
         <i></i>
         <input type="file" name="filename" @change="uploadFunc">
@@ -37,7 +37,7 @@
 
 <script>
 import {
-  getTempkey,
+  getToken,
   optionCreate
 } from '@/fetch/api'
 import COS from 'cos-js-sdk-v5'
@@ -47,24 +47,31 @@ export default {
     return {
       typeData: ['体验问题', '支付问题', '登录问题', '功能问题'],
       typeIndex: 0,
-      imgData: []
+      imgData: [],
+      formData: {
+        customerId: '',
+        type: 1,
+        content: '',
+        wechat: ''
+      }
     }
   },
   methods: {
     choiseType (eq) {
       this.typeIndex = eq
+      this.formData.type = eq + 1
     },
     async uploadFunc (file) {
       const data = file.target.files[0]
       const name = data.name.replace(/[ @#$%^&*{}:"L<>?]/g, '')
-      const option = await getTempkey({
+      const option = await getToken({
         key: new Date().getTime() + name,
         bucket: 'china'
       }).then((res) => {
         window.console.log(res)
         return {
-          key: res.data.credentials.tmpSecretKey,
-          token: res.data.credentials.sessionToken
+          key: res.data.key,
+          token: res.data.token
         }
       })
       const Cos = new COS({
@@ -77,28 +84,25 @@ export default {
         }
       })
       Cos.putObject({
-        Bucket: 'dueape-tutor-1255328906',
+        Bucket: 'dueape-1255328906',
         Region: 'ap-beijing',
         Key: option.key,
         StorageClass: 'STANDARD',
         Body: data, // 上传文件对象
-        onProgress: (progressData) => {
-          // this.upFile[this.upFileType].showFileProgress = true
-        }
+        onProgress: (progressData) => {}
       }, (error, result) => {
-        window.console.log(result)
         if (result.statusCode === 200) {
-          this.upFile[this.upFileType].fileName = data.name
-          if (this.upFileType === 1) {
-            window.console.log(option.key)
-            this.order.filePath = option.key
-          } else {
-            this.order.fullFilePath = option.key
-          }
+          this.imgData.push(`http://${result.Location}`)
         }
       })
     },
-    submitFunc () {}
+    submitFunc () {
+      optionCreate(Object.assign(this.formData, {
+        imageUrl: this.imgData.join(',')
+      })).then(res => {
+        window.console.log(res)
+      })
+    }
   }
 }
 </script>
