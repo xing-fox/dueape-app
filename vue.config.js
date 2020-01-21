@@ -2,7 +2,6 @@ const path = require("path")
 const CompressionPlugin = require("compression-webpack-plugin")
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "/dueape/" : "./",
   outputDir: "dist",
   assetsDir: "static",
   lintOnSave: false,

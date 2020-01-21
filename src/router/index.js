@@ -6,7 +6,7 @@ Vue.use(Router)
 Vue.use(require('vue-wechat-title'))
 
 const router = new Router({
-  base: '/dueape/',
+  mode: 'history',
   routes: routes
 })
 
