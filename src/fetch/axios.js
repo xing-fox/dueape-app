@@ -3,7 +3,8 @@ import qs from 'qs'
 
 // axios 配置
 axios.defaults.timeout = 50000
-axios.defaults.baseURL = process.env.NODE_ENV === "production" ? 'http://39.96.62.114:10086' : '/api'
+// axios.defaults.baseURL = process.env.NODE_ENV === "production" ? 'http://39.96.62.114:10086' : '/api'
+axios.defaults.baseURL = '/api'
 axios.defaults.withCredentials = true
 
 axios.interceptors.request.use(config => {

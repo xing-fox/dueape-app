@@ -45,6 +45,8 @@
             <div class="list-item">21:40-22:00 答疑</div>
           </div>
         </div>
+        <div v-if="index == 0" class="playback" @click="RouterItem(0)">看回放 <i></i> </div>
+        <div v-if="index == 1" class="join-course" @click="RouterItem(1)">进入教室</div>
       </div>
       <div class="title t-height">老师介绍</div>
       <div class="teacher">
@@ -80,7 +82,7 @@
       </div>
     </div>
     <div class="footer">
-      <div :class="['wx', {xfooter: isIosX}]" @click="status=true">
+      <div :class="['wx', {xfooter: isIosX}]" @click="ShareCourse">
         <i class="share"></i>
         <div>分享课程</div>
       </div>
@@ -118,6 +120,38 @@ export default {
     CommonTitle
   },
   methods: {
+    RouterView (val) {
+      const self = this
+      const Type = ['CourseData', 'OffLineCourse']
+      this.$JsBridge.GetIosMethods(bridge => {
+        bridge.callHandler('dueWebCallNative',{
+          actionType: 1,
+          actionTarget: Type[val],
+          data: Object.assign({}, self.Data)
+        })
+      })
+    },
+    RouterItem (val) {
+      const self = this
+      const Type = ['PlayBack', 'JoinRoom']
+      this.$JsBridge.GetIosMethods(bridge => {
+        bridge.callHandler('dueWebCallNative',{
+          actionType: 1,
+          actionTarget: Type[val],
+          data: Object.assign({}, self.Data)
+        })
+      })
+    },
+    ShareCourse () {
+      const self = this
+      this.$JsBridge.GetIosMethods(bridge => {
+        bridge.callHandler('dueWebCallNative',{
+          actionType: 0,
+          actionTarget: 'ShareCourse',
+          data: Object.assign({}, self.Data)
+        })
+      })
+    }
   },
   mounted () {
     const self = this
@@ -125,6 +159,7 @@ export default {
       if (window.scrollY > 100) self.opacity = `rgba(41, 44, 50, 1)`
       if (window.scrollY < 100) self.opacity = `rgba(41, 44, 50, ${window.scrollY / 100})`
     }
+
     // 判断ios机型
     if ((this.$isIos && (window.screen.height === 812 && window.screen.width === 375)) ||
       (window.screen.height === 896 && window.screen.width === 414)

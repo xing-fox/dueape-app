@@ -4,7 +4,7 @@
       <div class="ewm-main">
         <img src="../assets/icon/header.png" class="main-header">
         <div class="main-title">班主任二维码</div>
-        <div class="main-add">请扫描下方二维码</div>
+        <div class="main-add">请扫下方二维码添加</div>
         <img src="" class="main-ewm">
       </div>
       <div class="ewm-cancel bor-t" @click="cancelFunc()">

@@ -27,30 +27,30 @@ Vue.prototype.$JsBridge = JsBridge
 Vue.prototype.$isIos = IsIos // 系统判断
 Vue.prototype.$formValue = getUrlParam('form') === 'app' // 0 --> 微信h5  || 1 --> app
 
-//获取token
+// 获取token
 window.localStorage.setItem('token', '')
-// JsBridge.GetIosMethods(bridge => {
-//   bridge.callHandler('dueWebCallNative',{
-//     actionType: 0,
-//     actionTarget: 'GetCustomerId',
-//     data: {}
-//   }, res => {
-//     Vue.prototype.$CustomerId = res
-//   })
-//   bridge.callHandler('dueWebCallNative',{
-//     actionType: 0,
-//     actionTarget: 'GetToken',
-//     data: {}
-//   }, res => {
-//     window.localStorage.setItem('token', res)
-//     new Vue({
-//       router,
-//       render: h => h(App),
-//     }).$mount('#app')
-//   })
-// })
+JsBridge.GetIosMethods(bridge => {
+  bridge.callHandler('dueWebCallNative',{
+    actionType: 0,
+    actionTarget: 'GetCustomerId',
+    data: {}
+  }, res => {
+    Vue.prototype.$CustomerId = res
+  })
+  bridge.callHandler('dueWebCallNative',{
+    actionType: 0,
+    actionTarget: 'GetToken',
+    data: {}
+  }, res => {
+    window.localStorage.setItem('token', res)
+    new Vue({
+      router,
+      render: h => h(App),
+    }).$mount('#app')
+  })
+})
 
-new Vue({
-  router,
-  render: h => h(App),
-}).$mount('#app')
+// new Vue({
+//   router,
+//   render: h => h(App),
+// }).$mount('#app')
