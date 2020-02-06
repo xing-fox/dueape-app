@@ -1,18 +1,21 @@
 <template>
   <div class="order">
     <div>
-      <div class="item" @click="routeFunc">
+      <div class="item" v-for="(item, index) in Data" :key="index" @click="routeFunc">
         <div class="item-content bor-b">
-          <div class="content-title">COPM2511-期末考题冲刺班期末考题冲刺班</div>
-          <div class="content-time">7月12 - 7月14</div>
+          <div class="content-title">{{ item.courseTitle }}</div>
+          <div class="content-time">{{ item.courseStartTime }} - {{ item.courseEndTime }}</div>
         </div>
         <div class="item-bottom">
-          <div class="time">2019年11月18日 13:46</div>
-          <div class="total-price">总计：299.50</div>
-          <!-- <div class="button"></div> -->
+          <div class="time">{{ item.payTime }}</div>
+          <div class="total-price">总计：{{ item.payPriceStr }}</div>
+          <!-- <div class="button">
+            <div class="tab cancel">取消订单</div>
+            <div class="tab pay">重新支付</div>
+          </div> -->
         </div>
       </div>
-      <div class="item">
+      <!-- <div class="item">
         <div class="item-content bor-b">
           <div class="content-title">
             <span>COPM2511-期末考题冲刺班</span>
@@ -21,15 +24,16 @@
           <div class="content-time">7月12 - 7月14</div>
         </div>
         <div class="item-bottom">
-          <!-- <div class="time"></div> -->
+          <div class="time"></div>
           <div class="total-price">总计：299.50</div>
           <div class="button">
             <div class="tab cancel">取消订单</div>
             <div class="tab pay">重新支付</div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
+    <!-- <lottie :options="defaultOptions" :height="150" :width="150"/> -->
     <router-view />
   </div>
 </template>
@@ -38,17 +42,29 @@
 import {
   getMyOrderList
 } from '@/fetch/api'
+// import Lottie from 'vue-lottie'
+// import * as animationData from '@/assets/json/14606-10-second-timer.json'
 export default {
   name: 'order',
-  methods: {
-    routeFunc () {
+  data () {
+    return {
+      Data: []
+      // defaultOptions: {
+      //   animationData: animationData.default
+      // }
     }
+  },
+  // components: {
+  //   Lottie
+  // },
+  methods: {
+    routeFunc () {}
   },
   mounted () {
     getMyOrderList({
       customerId: this.$CustomerId
     }).then(res => {
-      window.console.log(res)
+      this.Data = res.data
     })
   }
 }

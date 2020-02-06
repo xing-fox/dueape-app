@@ -87,7 +87,7 @@
     <canvas id="canvas" ref="canvas"></canvas>
     <div class="content">
       <div class="content-title">提交成功,请等待工作人员审核!</div>
-      <div class="submit">重新申请</div>
+      <div class="submit" @click="reApply">重新申请</div>
     </div>
   </div>
 </template>
@@ -143,6 +143,11 @@ export default {
         ctx.lineTo(points[0][0], points[0][1])
         ctx.fillStyle = 'rgba(255, 255, 255, .3)'
         ctx.fill()
+      })
+    },
+    reApply () {
+      this.$router.push({
+        path: 'applyTutor'
       })
     }
   },

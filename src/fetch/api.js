@@ -20,7 +20,7 @@ export const getMyCouponList = (param) => {
  * @param 查询我的订单
  */
 export const getMyOrderList = (param) => {
-  return Post('/course/getMyOrderList', param)
+  return Post('/customer/getMyOrderList', param)
 }
 
 /**

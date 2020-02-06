@@ -45,8 +45,8 @@
             <div class="list-item">21:40-22:00 答疑</div>
           </div>
         </div>
-        <div v-if="index == 0" class="playback" @click="RouterItem(0)">看回放 <i></i> </div>
-        <div v-if="index == 1" class="join-course" @click="RouterItem(1)">进入教室</div>
+        <div v-if="item.status == 3" class="playback" @click="RouterItem(0)">看回放 <i></i> </div>
+        <div v-if="item.status == 2" class="join-course" @click="RouterItem(1)">进入教室</div>
       </div>
       <div class="title t-height">老师介绍</div>
       <div class="teacher">

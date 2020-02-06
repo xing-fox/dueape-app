@@ -32,6 +32,7 @@
       <input type="text" placeholder="请输入微信号（选填）">
     </div>
     <div class="submit active" @click="submitFunc">提交</div>
+    <svg-updata-image v-if="loadingStatus" class="svg-loading" />
   </div>
 </template>
 
@@ -41,7 +42,7 @@ import {
   optionCreate
 } from '@/fetch/api'
 import COS from 'cos-js-sdk-v5'
-import { setTimeout } from 'timers';
+import SvgUpdataImage from '@/components/svg-updataImage'
 export default {
   name: 'Opinion',
   data () {
@@ -49,6 +50,7 @@ export default {
       typeData: ['体验问题', '支付问题', '登录问题', '功能问题'],
       typeIndex: 0,
       imgData: [],
+      loadingStatus: false,
       formData: {
         customerId: this.$CustomerId,
         type: 1,
@@ -57,12 +59,16 @@ export default {
       }
     }
   },
+  components: {
+    SvgUpdataImage: SvgUpdataImage
+  },
   methods: {
     choiseType (eq) {
       this.typeIndex = eq
       this.formData.type = eq + 1
     },
     async uploadFunc (file) {
+      this.loadingStatus = true
       const data = file.target.files[0]
       const name = data.name.replace(/[ @#$%^&*{}:"L<>?]/g, '')
       const option = await getToken({
@@ -94,6 +100,7 @@ export default {
       }, (error, result) => {
         if (result.statusCode === 200) {
           this.imgData.push(`http://${result.Location}`)
+          this.loadingStatus = false
         }
       })
     },
@@ -215,6 +222,7 @@ export default {
     align-items: center;
     flex-wrap: wrap-reverse;
     margin: 0.4rem 0.3rem 0;
+    position: relative;
     img {
       display: inline-block;
       width: 1.7rem;
@@ -283,6 +291,15 @@ export default {
         rgba(241, 185, 108, 1)
       );
     }
+  }
+  .svg-loading {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, .7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
 }
 </style>
