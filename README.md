@@ -22,5 +22,3 @@ yarn lint
 
 ### Customize configuration
 ```
-##### ip: 39.96.62.114
-##### 密码: KeVn6wMFFZ0xcirjFg3A

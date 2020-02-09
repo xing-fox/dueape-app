@@ -1,8 +1,5 @@
 <template>
   <div class="opinion">
-    <!-- <common-title
-      :isIosX="isIosX"
-    name="意见反馈" />-->
     <div class="type">
       <div class="title">
         <i></i>
@@ -18,10 +15,13 @@
       </div>
     </div>
     <div class="messageBox">
-      <textarea placeholder="请输入反馈内如..."></textarea>
+      <textarea v-model="formData.content" placeholder="请输入反馈内容..."></textarea>
     </div>
     <div class="uploadImg">
-      <img v-for="(item, index) in imgData" :key="index" :src="item">
+      <div class="imgShow" v-for="(item, index) in imgData" :key="index">
+        <img :src="item">
+        <i class="delete" @click="imgData.splice(index, 1)"></i>
+      </div>
       <div class="uploadInput">
         <i></i>
         <input type="file" name="filename" @change="uploadFunc">
@@ -29,9 +29,9 @@
     </div>
     <div class="inputWx bor-t bor-b">
       <span>微信联系</span>
-      <input type="text" placeholder="请输入微信号（选填）">
+      <input v-model="formData.wechat" type="text" placeholder="请输入微信号（选填）">
     </div>
-    <div class="submit active" @click="submitFunc">提交</div>
+    <div :class="['submit', {'active': sumbitStatus}]" @click="submitFunc">提交</div>
     <svg-updata-image v-if="loadingStatus" class="svg-loading" />
   </div>
 </template>
@@ -59,8 +59,13 @@ export default {
       }
     }
   },
+  computed: {
+    sumbitStatus () {
+      return this.formData.content
+    }
+  },
   components: {
-    SvgUpdataImage: SvgUpdataImage
+    SvgUpdataImage
   },
   methods: {
     choiseType (eq) {
@@ -219,20 +224,36 @@ export default {
   .uploadImg {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    flex-wrap: wrap-reverse;
+    align-items: flex-start;
+    flex-wrap: wrap;
     margin: 0.4rem 0.3rem 0;
     position: relative;
-    img {
+    .imgShow {
       display: inline-block;
       width: 1.7rem;
       height: 1.7rem;
-      margin: 0 0.2rem 0 0;
-      background-image: url("../assets/icon/upload.jpg");
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
+      margin: 0 .6rem .4rem 0;
+      position: relative;
+      img {
+        width: 100%;
+        height: 100%;
+        background-image: url("../assets/icon/upload.jpg");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+      i {
+        width: .3rem;
+        height: .3rem;
+        position: absolute;
+        top: -.15rem;
+        right: -.15rem;
+        background-image: url("../assets/icon/delete.png");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
     }
     .uploadInput {
+      display: inline-block;
       width: 1.7rem;
       height: 1.7rem;
       position: relative;
@@ -275,6 +296,7 @@ export default {
   .submit {
     color: #fff;
     font-size: 0.36rem;
+    pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -285,6 +307,7 @@ export default {
     background: #d3d3d3;
     &.active {
       color: #64391a;
+      pointer-events: initial !important;
       background: linear-gradient(
         90deg,
         rgba(247, 208, 150, 1),

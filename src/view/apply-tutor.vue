@@ -94,6 +94,8 @@
               -webkit-appearance: none;
               color: #CDA34F;
               font-size: .3rem;
+              outline: none;
+              caret-color: #e7bb79;
               width: 100%;
               height: .7rem;
               padding: 0 0 0 .1rem;
@@ -108,24 +110,10 @@
         margin: .3rem .3rem;
         padding: .6rem 0 .45rem;
         border-radius: .1rem;
-        border: 1px;
+        border: 1px solid rgba(245, 234, 218, 1);
+        box-sizing: border-box;
         background: #fff;
         position: relative;
-        &:before {
-          content: '';
-          width: 200%;
-          height: 200%;
-          border-radius: .2rem;
-          border: 1px solid rgba(245, 234, 218, 1);
-          transform: scale(.5, .5);
-          transform-origin: 0 0;
-          position: absolute;
-          top: 0;
-          left: -.01rem;
-          right: 0;
-          bottom: 0;
-          z-index: -1;
-        }
         .select {
           display: flex;
           align-items: center;
@@ -208,6 +196,8 @@
               -webkit-appearance: none;
               color: #CDA34F;
               font-size: .3rem;
+              outline: none;
+              caret-color: #e7bb79;
               width: 100%;
               height: .7rem;
               padding: 0 0 0 .1rem;
@@ -243,6 +233,8 @@
               -webkit-appearance: none;
               color: #CDA34F;
               font-size: .3rem;
+              outline: none;
+              caret-color: #e7bb79;
               width: 100%;
               line-height: .4rem;
               padding: .1rem;
@@ -260,15 +252,61 @@
             }
           }
           .image {
-            display: flex;
-            flex-wrap: wrap;
             width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            flex-wrap: wrap;
             margin: .24rem 0 .5rem 0;
-            img {
-              border: none;
+            position: relative;
+            .imgShow {
+              display: inline-block;
               width: 1.7rem;
               height: 1.7rem;
-              margin: 0 .2rem 0 0;
+              margin: 0 .3rem .4rem 0;
+              position: relative;
+              img {
+                width: 100%;
+                height: 100%;
+                background-image: url("../assets/icon/upload.jpg");
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+              }
+              i {
+                width: .3rem;
+                height: .3rem;
+                position: absolute;
+                top: -.15rem;
+                right: -.15rem;
+                background-image: url("../assets/icon/delete.png");
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+              }
+            }
+            .uploadInput {
+              display: inline-block;
+              width: 1.7rem;
+              height: 1.7rem;
+              position: relative;
+              input {
+                opacity: 0;
+                outline: none;
+                caret-color: #e7bb79;
+                width: 1.7rem;
+                height: 1.7rem;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 1;
+              }
+              i {
+                display: inline-block;
+                width: 1.7rem;
+                height: 1.7rem;
+                background-image: url("../assets/icon/upload.jpg");
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+              }
             }
           }
         }
@@ -338,7 +376,7 @@
           <li
             v-for="(item, index) in choiseData"
             :key="index"
-            @click="choiseFunc(index)">
+            @click="type = index">
             <div :class="{active: type === index}"></div>
             <span>{{ item.text }}</span>
           </li>
@@ -407,7 +445,14 @@
         <div class="box">
           <div class="name">学分/奖项或教学经历证明</div>
           <div class="image">
-            <img src="../assets/icon/upload.jpg">
+            <div class="imgShow" v-for="(item, index) in imgData" :key="index">
+              <img :src="item">
+              <i class="delete" @click="imgData.splice(index, 1)"></i>
+            </div>
+            <div class="uploadInput">
+              <i></i>
+              <input type="file" name="filename" @change="uploadFunc">
+            </div>
           </div>
         </div>
         <div class="box">
@@ -428,8 +473,10 @@
 
 <script>
 import {
+  getToken,
   applyTutor
 } from '@/fetch/api'
+import COS from 'cos-js-sdk-v5'
 import CommonTitle from "@/components/common-title"
 import { setTimeout } from 'timers';
 export default {
@@ -437,11 +484,13 @@ export default {
   data () {
     return {
       type: 0,
-      choiseData: [{
-        text: '在读'
-      }, {
-        text: '已工作'
-      }],
+      choiseData: [
+        {
+          text: '在读'
+        }, {
+          text: '已工作'
+        }
+      ],
       formData: {
         customerId: this.$CustomerId,
         name: '',
@@ -456,7 +505,9 @@ export default {
         filePath: '',
         wxId: ''
       },
+      imgData: [],
       isIosX: false,
+      loadingStatus: false,
       opacity: 'linear-gradient(270deg, rgba(226, 176, 102, 0), rgba(239, 204, 148, 0))'
     }
   },
@@ -470,12 +521,47 @@ export default {
     CommonTitle
   },
   methods: {
-    choiseFunc (eq) {
-      window.console.log(eq)
-      this.type = eq
+    async uploadFunc (file) {
+      this.loadingStatus = true
+      const data = file.target.files[0]
+      const name = data.name.replace(/[ @#$%^&*{}:"L<>?]/g, '')
+      const option = await getToken({
+        key: new Date().getTime() + name,
+        bucket: 'china'
+      }).then((res) => {
+        window.console.log(res)
+        return {
+          key: res.data.key,
+          token: res.data.token
+        }
+      })
+      const Cos = new COS({
+        getAuthorization: (options, callback) => {
+          option.token = option.token.substring(option.token.indexOf('?sign') + 6, option.token.length)
+          let arr = {
+            Authorization: unescape(option.token)
+          }
+          callback(arr)
+        }
+      })
+      Cos.putObject({
+        Bucket: 'dueape-1255328906',
+        Region: 'ap-beijing',
+        Key: option.key,
+        StorageClass: 'STANDARD',
+        Body: data, // 上传文件对象
+        onProgress: (progressData) => {}
+      }, (error, result) => {
+        if (result.statusCode === 200) {
+          this.imgData.push(`http://${result.Location}`)
+          this.loadingStatus = false
+        }
+      })
     },
     submitFunc () {
-      applyTutor(this.formData).then(res => {
+      applyTutor(Object.assign(this.formData, {
+        filePath: this.imgData.join(',')
+      })).then(res => {
         this.$toast(res.data, {
           durtaion: 500,
           location: 'center'
@@ -503,3 +589,4 @@ export default {
   }
 }
 </script>
+ 

@@ -1,14 +1,25 @@
 <template>
-  <div :class="['wrapper', {xwrapper: isIosX}]">
+  <div :class="['wrapper', {xwrapper: isIosX && adStatus}]">
     <common-title
       isFixed
       name="课程详情"
       :isIosX="isIosX"
       :normal="false"
       :Opacity="opacity"
+      v-if="adStatus"
     ></common-title>
+    <div class="ad" v-if="!adStatus">
+      <img src="../assets/icon/logo.jpg">
+      <div class="ad-content">
+        <div class="content-download">下载DueApp APP</div>
+        <span>让自己开启“人生外挂”之旅</span>
+      </div>
+      <div class="choise-course">
+        <span>立即选课</span>
+      </div>
+    </div>
     <div
-      :class="['header',{xheader: isIosX}]"
+      :class="['header',{xheader: isIosX && adStatus}]"
       ref="header">
       <div class="main">
         <div class="m-title">{{ Data.courseTitle }}-{{ Data.courseNo }}</div>
@@ -18,25 +29,15 @@
         </div>
         <div class="m-has">{{ Data.applyNum }}人已报名</div>
       </div>
-      <div class="ad" v-if="adStatus">
-        <img src="../assets/icon/logo.jpg">
-        <div class="ad-content">
-          <div class="content-download">下载DueApp APP</div>
-          <span>让自己开启“人生外挂”之旅</span>
-        </div>
-        <div class="choise-course">
-          <span>立即选课</span>
-        </div>
-      </div>
     </div>
     <div class="content">
-      <div class="data">
+      <div class="data" v-if="adStatus && Data.isPay == 1">
         <div class="list" @click="RouterView(0)">课程资料</div>
         <div class="list" @click="RouterView(1)">离线课程</div>
       </div>
       <div class="title">课程大纲</div>
       <div v-for="(item, index) in Data.courseDetails" :key="index" class="item bor-b">
-        <div class="i-list">{{ index }}</div>
+        <div class="i-list">{{ index + 1 }}</div>
         <div class="i-main">
           <div class="m-title">{{ item.detailTitle }}</div>
           <div class="m-time">{{ item.courseEndTime }} | 已结束</div>
@@ -45,8 +46,8 @@
             <div class="list-item">21:40-22:00 答疑</div>
           </div>
         </div>
-        <div v-if="item.status == 3" class="playback" @click="RouterItem(0)">看回放 <i></i> </div>
-        <div v-if="item.status == 2" class="join-course" @click="RouterItem(1)">进入教室</div>
+        <div v-if="item.status == 3 && adStatus && Data.isPay == 1" class="playback" @click="RouterItem(0, item)">看回放 <i></i> </div>
+        <div v-if="item.status == 2 && adStatus && Data.isPay == 1" class="join-course" @click="RouterItem(1, item)">进入教室</div>
       </div>
       <div class="title t-height">老师介绍</div>
       <div class="teacher">
@@ -82,15 +83,16 @@
       </div>
     </div>
     <div class="footer">
-      <div :class="['wx', {xfooter: isIosX}]" @click="ShareCourse">
+      <div v-if="adStatus" :class="['wx', {xfooter: isIosX}]" @click="ShareCourse">
         <i class="share"></i>
         <div>分享课程</div>
       </div>
-      <div :class="['share', {xfooter: isIosX}]" @click="status=true">
+      <div :class="['share', {xfooter: isIosX}, {shareWx: !adStatus}]" @click="status=true">
         <i class="wx"></i>
         <div>班主任微信</div>
       </div>
-      <div :class="['app', {xfooter: isIosX}]">立即报名</div>
+      <div v-if="adStatus && Data.isPay == 1" :class="['sign-up', {xfooter: isIosX}]"]>已报名</div>
+      <div v-if="adStatus && Data.isPay == 0" :class="['app', {xfooter: isIosX}]" @click="signUp">立即报名</div>
     </div>
     <ewm-modal v-if="status" @cancel="status=false"></ewm-modal>
   </div>
@@ -107,10 +109,9 @@ export default {
   data () {
     return {
       status: false, // 二维码状态
-      adStatus: false,
+      adStatus: this.$formValue,
       isIosX: false,
       footStatus: false,
-      formValue: this.$formValue,
       opacity: 'rgba(41, 44, 50, 0)',
       Data: Object
     }
@@ -120,35 +121,78 @@ export default {
     CommonTitle
   },
   methods: {
+    /**
+     * 课程资料，离线课程
+     */
     RouterView (val) {
-      const self = this
-      const Type = ['CourseData', 'OffLineCourse']
+      const Type = [{
+        target: 'CourseData',
+        data: {
+          courseFileAttrList: this.Data.courseFileAttrList
+        }
+      }, {
+        target: 'OffLineCourse',
+        data: this.Data
+      }]
       this.$JsBridge.GetIosMethods(bridge => {
         bridge.callHandler('dueWebCallNative',{
           actionType: 1,
-          actionTarget: Type[val],
-          data: Object.assign({}, self.Data)
+          actionTarget: Type[val].target,
+          data: Type[val].data
         })
       })
     },
-    RouterItem (val) {
-      const self = this
-      const Type = ['PlayBack', 'JoinRoom']
+    /**
+     * 看回放、进入教室
+     */
+    RouterItem (val, data) {
+      const Type = [{
+        target: 'PlayBack',
+        data: {
+          courseVideoPath: data.courseVideoPath
+        }
+      }, {
+        target: 'JoinRoom',
+        data: {
+          zoomMeetId: data.zoomMeetId,
+          zoomMeetPassword: data.zoomMeetId
+        }
+      }]
       this.$JsBridge.GetIosMethods(bridge => {
         bridge.callHandler('dueWebCallNative',{
           actionType: 1,
-          actionTarget: Type[val],
-          data: Object.assign({}, self.Data)
+          actionTarget: Type[val].target,
+          data: Type[val].data
         })
       })
     },
+    /**
+     * 课程分享
+     */
     ShareCourse () {
       const self = this
       this.$JsBridge.GetIosMethods(bridge => {
         bridge.callHandler('dueWebCallNative',{
           actionType: 0,
           actionTarget: 'ShareCourse',
-          data: Object.assign({}, self.Data)
+          data: {
+            title: self.Data.courseTitle,
+            subTitle: self.Data.recommendReason,
+            linkUrl: 'http://39.96.62.114:8088/courseDetails?id=1212&from=app',
+          }
+        })
+      })
+    },
+    /**
+     * 立即报名
+     */
+    signUp () {
+      const self = this
+      this.$JsBridge.GetIosMethods(bridge => {
+        bridge.callHandler('dueWebCallNative',{
+          actionType: 1,
+          actionTarget: 'BuyCourse',
+          data: self.Data
         })
       })
     }
@@ -174,7 +218,7 @@ export default {
       }
     })
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
@@ -200,6 +244,54 @@ export default {
     left: 0;
     z-index: -1;
   }
+  .ad {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 1.1rem;
+    padding: 0 0.3rem;
+    box-sizing: border-box;
+    background: #ebc486;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    img {
+      width: 0.76rem;
+      height: 0.76rem;
+    }
+    .ad-content {
+      color: #292c32;
+      flex: 1;
+      margin: 0 0 0 0.3rem;
+      .content-download {
+        font-size: 0.28rem;
+        font-weight: bold;
+        line-height: 0.44rem;
+      }
+    }
+    .choise-course {
+      display: flex;
+      align-items: center;
+      width: 1.66rem;
+      height: 0.62rem;
+      padding: 0.02rem;
+      border-radius: 0.1rem;
+      border: 1px solid #292c32;
+      box-sizing: border-box;
+      span {
+        color: #ebc486;
+        font-size: 0.26rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        border-radius: 0.1rem;
+        background: #292c32;
+      }
+    }
+  }
   .header {
     padding: 0 .33rem 1rem;
     position: relative;
@@ -219,8 +311,8 @@ export default {
       }
       .m-price {
         color: #ddaf7b;
-        font-size: 0.36rem;
-        font-weight: bold;
+        font-size: 0.38rem;
+        font-weight: 500;
         line-height: 0.44rem;
         margin: 0 0 0.2rem 0;
         span {
@@ -236,57 +328,9 @@ export default {
         font-size: 0.22rem;
       }
     }
-    .ad {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: 1.1rem;
-      padding: 0 0.3rem;
-      box-sizing: border-box;
-      background: #ebc486;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 2;
-      img {
-        width: 0.76rem;
-        height: 0.76rem;
-      }
-      .ad-content {
-        color: #292c32;
-        flex: 1;
-        margin: 0 0 0 0.3rem;
-        .content-download {
-          font-size: 0.28rem;
-          font-weight: bold;
-          line-height: 0.44rem;
-        }
-      }
-      .choise-course {
-        display: flex;
-        align-items: center;
-        width: 1.66rem;
-        height: 0.62rem;
-        padding: 0.02rem;
-        border-radius: 0.1rem;
-        border: 1px solid #292c32;
-        box-sizing: border-box;
-        span {
-          color: #ebc486;
-          font-size: 0.26rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 100%;
-          height: 100%;
-          border-radius: 0.1rem;
-          background: #292c32;
-        }
-      }
-    }
   }
   .content {
-    padding: 0 0.3rem 1.3rem;
+    padding: 0 0.3rem 1rem;
     margin: -0.2rem 0 0 0;
     border-top-left-radius: 0.2rem;
     border-top-right-radius: 0.2rem;
@@ -319,31 +363,32 @@ export default {
     }
     .title {
       color: #222;
-      font-size: 0.36rem;
+      font-size: .36rem;
       font-weight: bold;
-      margin: 0 0 0.15rem 0;
+      margin: 0 0 .15rem 0;
       padding: .68rem 0 0 0;
       &.t-height {
-        padding: 0.77rem 0 0 0;
+        padding: .77rem 0 0 0;
       }
     }
     .item {
       display: flex;
-      padding: 0.4rem 0;
+      padding: .4rem 0;
       position: relative;
       .i-list {
         color: #c39d56;
-        font-size: 0.3rem;
-        width: 0.42rem;
-        height: 0.42rem;
-        line-height: 0.42rem;
-        margin: 0.05rem 0 0 0;
+        font-size: .3rem;
+        width: .42rem;
+        height: .42rem;
+        line-height: .42rem;
+        margin: .05rem 0 0 0;
         text-align: center;
-        border-radius: 0.2rem;
+        border-radius: .2rem;
         background: #fbf7ee;
       }
       .i-main {
-        margin: 0 0 0 0.2rem;
+        flex: 1;
+        margin: 0 0 0 .2rem;
         .m-title {
           color: #2d2d2d;
           font-size: 0.3rem;
@@ -351,17 +396,17 @@ export default {
         }
         .m-time {
           color: #666;
-          font-size: 0.26rem;
-          line-height: 0.28rem;
-          margin: 0.25rem 0 0.45rem 0;
+          font-size: .26rem;
+          line-height: .28rem;
+          margin: 0.25rem 0 .45rem 0;
         }
         .m-list {
-          padding: 0 0 0 0.15rem;
+          padding: 0 0 0 .15rem;
           position: relative;
           .list-item {
             color: #666;
-            font-size: 0.26rem;
-            margin: 0 0 0.25rem 0;
+            font-size: .26rem;
+            margin: 0 0 .25rem 0;
             &:nth-last-child(1) {
               margin: 0;
             }
@@ -405,7 +450,7 @@ export default {
     }
     .teacher {
       display: flex;
-      padding: 0.3rem 0 0 0;
+      padding: .3rem 0 0 0;
       .t-image {
         display: flex;
         align-items: center;
@@ -431,61 +476,62 @@ export default {
           z-index: 1;
         }
         img {
-          width: 0.9rem;
-          height: 0.9rem;
+          width: .9rem;
+          height: .9rem;
           border-radius: 50%;
           overflow: hidden;
         }
       }
       .t-details {
         flex: 1;
-        margin: 0 0 0 0.3rem;
+        margin: 0 0 0 .3rem;
         .details-name {
           color: #bfa065;
-          font-size: 0.32rem;
-          margin: 0 0 0.1rem 0;
+          font-size: .32rem;
+          margin: 0 0 .1rem 0;
         }
         .details-item {
           color: #666;
-          font-size: 0.26rem;
+          font-size: .26rem;
           display: flex;
-          line-height: 0.38rem;
+          line-height: .38rem;
           span.item-intro {
-            margin: 0 0 0 0.1rem;
+            margin: 0 0 0 .1rem;
           }
         }
       }
     }
     .notice {
       display: flex;
-      padding: 0.4rem 0 0 0;
+      padding: .4rem 0 0 0;
       position: relative;
       .notice-list {
         color: #c39d56;
-        font-size: 0.3rem;
+        font-size: .3rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 0.42rem;
-        height: 0.42rem;
+        width: .42rem;
+        height: .42rem;
         background: #fbf7ee;
         border-radius: 50%;
       }
       .notice-main {
         flex: 1;
-        margin: 0 0 0 0.3rem;
+        margin: 0 0 0 .3rem;
         .notice-main-title {
           color: #2d2d2d;
-          font-size: 0.3rem;
+          font-size: .3rem;
           font-weight: bold;
-          height: 0.4rem;
-          margin: 0 0 0.15rem 0;
+          height: .4rem;
+          line-height: 1;
+          margin: 0 0 .2rem 0;
         }
         .notice-main-intro {
           color: #666;
-          font-size: 0.26rem;
-          line-height: 0.38rem;
-          margin: 0 0 0.1rem 0;
+          font-size: .26rem;
+          line-height: .38rem;
+          margin: 0 0 .25rem 0;
         }
       }
     }
@@ -511,6 +557,11 @@ export default {
       background: #2f3245;
       &.xfooter {
         padding: 0 0 0.3rem 0;
+      }
+      &.shareWx {
+        width: initial;
+        flex: 1;
+        height: 1.1rem;
       }
       i {
         display: inline-block;
@@ -541,6 +592,20 @@ export default {
       justify-content: center;
       line-height: 1.1rem;
       background: #e5c175;
+      &.xfooter {
+        padding: 0 0 0.3rem 0;
+      }
+    }
+    .sign-up {
+      color: #fff;
+      font-size: 0.36rem;
+      font-weight: bold;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1rem;
+      background: #d3d3d3;
       &.xfooter {
         padding: 0 0 0.3rem 0;
       }

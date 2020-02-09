@@ -54,5 +54,21 @@ export default [
     meta: {
       title: '审核中...'
     }
+  },
+  {
+    path: '/serviceAgree',
+    name: 'serviceagree',
+    component: resolve => require(['@/view/service-agreement'], resolve),
+    meta: {
+      title: '服务协议'
+    }
+  },
+  {
+    path: '/privatePolicy',
+    name: 'privatepolicy',
+    component: resolve => require(['@/view/private-policy'], resolve),
+    meta: {
+      title: '隐私政策'
+    }
   }
 ]
