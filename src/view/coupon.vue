@@ -123,6 +123,7 @@ export default {
           font-size: .26rem;
           span {
             font-size: .48rem;
+            font-weight: bold;
           }
         }
       }

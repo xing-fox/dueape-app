@@ -44,11 +44,11 @@ JsBridge.GetIosMethods(bridge => {
     data: {}
   }, res => {
     window.localStorage.setItem('token', res)
-    new Vue({
-      router,
-      render: h => h(App),
-    }).$mount('#app')
   })
+  new Vue({
+    router,
+    render: h => h(App),
+  }).$mount('#app')
   return false
 })
 

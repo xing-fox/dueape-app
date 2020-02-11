@@ -276,8 +276,8 @@
                 width: .3rem;
                 height: .3rem;
                 position: absolute;
-                top: -.15rem;
-                right: -.15rem;
+                top: .12rem;
+                right: .12rem;
                 background-image: url("../assets/icon/delete.png");
                 background-size: 100% 100%;
                 background-repeat: no-repeat;

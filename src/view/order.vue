@@ -96,6 +96,7 @@ export default {
         .content-title {
           color: #222;
           font-size: .34rem;
+          width: 80%;
           font-weight: bold;
           display: flex;
           .no-pay {
@@ -109,7 +110,7 @@ export default {
         }
         .content-time {
           color: #666;
-          font-size: .26trm;
+          font-size: .26rem;
           margin: .28rem 0 0 0;
         }
       }

@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="data" v-if="adStatus && Data.isPay == 1">
+      <div class="data" v-if="adStatus && Data.isPay == '1'">
         <div class="list" @click="RouterView(0)">课程资料</div>
         <div class="list" @click="RouterView(1)">离线课程</div>
       </div>
@@ -46,8 +46,8 @@
             <div class="list-item">21:40-22:00 答疑</div>
           </div>
         </div>
-        <div v-if="item.status == 3 && adStatus && Data.isPay == 1" class="playback" @click="RouterItem(0, item)">看回放 <i></i> </div>
-        <div v-if="item.status == 2 && adStatus && Data.isPay == 1" class="join-course" @click="RouterItem(1, item)">进入教室</div>
+        <div v-if="item.status == 3 && adStatus && Data.isPay == '1'" class="playback" @click="RouterItem(0, item)">看回放 <i></i> </div>
+        <div v-if="item.status == 2 && adStatus && Data.isPay == '1'" class="join-course" @click="RouterItem(1, item)">进入教室</div>
       </div>
       <div class="title t-height">老师介绍</div>
       <div class="teacher">
@@ -91,8 +91,8 @@
         <i class="wx"></i>
         <div>班主任微信</div>
       </div>
-      <div v-if="adStatus && Data.isPay == 1" :class="['sign-up', {xfooter: isIosX}]"]>已报名</div>
-      <div v-if="adStatus && Data.isPay == 0" :class="['app', {xfooter: isIosX}]" @click="signUp">立即报名</div>
+      <div v-if="adStatus && Data.isPay == '1'" :class="['sign-up', {xfooter: isIosX}]">已报名</div>
+      <div v-if="adStatus && Data.isPay == '0'" :class="['app', {xfooter: isIosX}]" @click="signUp">立即报名</div>
     </div>
     <ewm-modal v-if="status" @cancel="status=false"></ewm-modal>
   </div>
@@ -287,7 +287,7 @@ export default {
         justify-content: center;
         width: 100%;
         height: 100%;
-        border-radius: 0.1rem;
+        border-radius: .1rem;
         background: #292c32;
       }
     }
@@ -314,7 +314,7 @@ export default {
         font-size: 0.38rem;
         font-weight: 500;
         line-height: 0.44rem;
-        margin: 0 0 0.2rem 0;
+        margin: 0 0 0.1rem 0;
         span {
           color: #cccccc;
           font-size: 0.26rem;
@@ -381,7 +381,6 @@ export default {
         width: .42rem;
         height: .42rem;
         line-height: .42rem;
-        margin: .05rem 0 0 0;
         text-align: center;
         border-radius: .2rem;
         background: #fbf7ee;
@@ -488,6 +487,7 @@ export default {
         .details-name {
           color: #bfa065;
           font-size: .32rem;
+          font-weight: bold;
           margin: 0 0 .1rem 0;
         }
         .details-item {
@@ -524,7 +524,7 @@ export default {
           font-size: .3rem;
           font-weight: bold;
           height: .4rem;
-          line-height: 1;
+          line-height: .42rem;
           margin: 0 0 .2rem 0;
         }
         .notice-main-intro {

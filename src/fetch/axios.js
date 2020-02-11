@@ -7,8 +7,8 @@ axios.defaults.baseURL = '/api'
 axios.defaults.withCredentials = true
 
 axios.interceptors.request.use(config => {
-  const token = window.localStorage.getItem('token')
-  // const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtb2JpbGUiOiIxODIyNjYyNjczMSIsImlkIjoiNjEiLCJleHAiOjE1ODA4Nzg0ODB9.RyOH_qmwo_F31HWTl7NJhp1ZIEp2Wb2B23kJAhU4nDI'
+  // const token = window.localStorage.getItem('token')
+  const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtb2JpbGUiOiIxODIyNjYyNjczMSIsImlkIjoiNjEiLCJleHAiOjE1ODA4Nzg0ODB9.RyOH_qmwo_F31HWTl7NJhp1ZIEp2Wb2B23kJAhU4nDI'
   if (token) config.headers.Authorization = token
   return config
 }, error => {

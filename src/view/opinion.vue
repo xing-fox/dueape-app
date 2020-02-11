@@ -16,6 +16,7 @@
     </div>
     <div class="messageBox">
       <textarea v-model="formData.content" placeholder="请输入反馈内容..."></textarea>
+      <div class="text-length"><span>{{ contentLength }}</span>/200</div>
     </div>
     <div class="uploadImg">
       <div class="imgShow" v-for="(item, index) in imgData" :key="index">
@@ -62,6 +63,9 @@ export default {
   computed: {
     sumbitStatus () {
       return this.formData.content
+    },
+    contentLength () {
+      return this.formData.content.length || 0
     }
   },
   components: {
@@ -141,7 +145,7 @@ export default {
   .type {
     color: #222;
     font-size: 0.32rem;
-    margin: 0 0.24rem;
+    margin: 0 .3rem;
     .title {
       display: flex;
       align-items: center;
@@ -157,7 +161,6 @@ export default {
       }
       span {
         flex: 1;
-        margin: 0 0 0 0.1rem;
       }
     }
     .type-list {
@@ -191,7 +194,7 @@ export default {
           bottom: 0;
         }
         &.active {
-          color: #eac397;
+          color: #CDA34F;
           &:before {
             content: "";
             width: 200%;
@@ -199,7 +202,7 @@ export default {
             transform: scale(0.5, 0.5);
             transform-origin: 0 0;
             border-radius: 0.1rem;
-            border: 1px solid #eac397;
+            border: 1px solid #CDA34F;
             position: absolute;
             top: 0;
             left: 0;
@@ -211,14 +214,25 @@ export default {
     }
   }
   .messageBox {
-    margin: 0.3rem 0.3rem 0;
+    margin: 0.3rem 0.15rem 0;
+    position: relative;
     textarea {
       color: #222222;
       font-size: 0.3rem;
+      outline: none;
+      caret-color: #e7bb79;
       width: 96%;
       height: 1.8rem;
       line-height: 0.45rem;
       border: none;
+    }
+    .text-length {
+      color: #666;
+      font-size: .24rem;
+      margin: 0 0 0 .15rem;
+      span {
+        color: #CDA34F;
+      }
     }
   }
   .uploadImg {
@@ -226,7 +240,7 @@ export default {
     flex-direction: row;
     align-items: flex-start;
     flex-wrap: wrap;
-    margin: 0.4rem 0.3rem 0;
+    margin: .4rem .3rem 0;
     position: relative;
     .imgShow {
       display: inline-block;
@@ -245,8 +259,8 @@ export default {
         width: .3rem;
         height: .3rem;
         position: absolute;
-        top: -.15rem;
-        right: -.15rem;
+        top: .12rem;
+        right: .12rem;
         background-image: url("../assets/icon/delete.png");
         background-size: 100% 100%;
         background-repeat: no-repeat;
@@ -259,6 +273,8 @@ export default {
       position: relative;
       input {
         opacity: 0;
+        outline: none;
+        caret-color: #e7bb79;
         width: 1.7rem;
         height: 1.7rem;
         position: absolute;
@@ -291,6 +307,7 @@ export default {
     input {
       font-size: 0.32rem;
       border: none;
+      caret-color: #e7bb79;
     }
   }
   .submit {
